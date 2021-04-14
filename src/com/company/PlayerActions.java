@@ -13,16 +13,9 @@ public class PlayerActions {
         static int mousedrag_y = -100;
         static ArrayList<int[]> dragarraylist = new ArrayList<int[]>();
         static boolean dragactive = false;
-        static boolean listening = false;
+        //static boolean listening = false;
         static Move move = new Move();
         static Click click = new Click();
-
-        public int getmouseposition_x(){
-            return mouseposition_x;
-        }
-        public int getmouseposition_y(){
-            return mouseposition_y;
-        }
 
         public static class Move implements MouseMotionListener{
 
@@ -47,8 +40,7 @@ public class PlayerActions {
 
             @Override
             public void mouseClicked(MouseEvent mouseEvent) {
-                // when pressed the button
-                //System.out.println("mouse was clicked");
+
                 PlaygroundGUI.ground.repaint();
             }
 
@@ -90,7 +82,7 @@ public class PlayerActions {
             public void actionPerformed(ActionEvent actionEvent) {
                 System.out.println("Button2 pressed");
                 dragarraylist.clear();
-                PlaygroundGUI.ground.removeKeyBindings();
+
                 PlaygroundGUI.ground.removeMouseMotionListener(move);
                 PlaygroundGUI.ground.removeMouseListener(click);
                 GameMaster.gamestate = !GameMaster.gamestate;
@@ -116,6 +108,7 @@ public class PlayerActions {
                 } else {
                     Ground.player2.move_left();
                 }
+                PlaygroundGUI.ground.removeKeyBindings();
                 System.out.println("Player moved left");
             }
         }
@@ -129,6 +122,7 @@ public class PlayerActions {
                 } else {
                     Ground.player2.move_right();
                 }
+                PlaygroundGUI.ground.removeKeyBindings();
                 System.out.println("Player moved right");
             }
         }
@@ -137,10 +131,13 @@ public class PlayerActions {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 if(!GameMaster.gamestate) {
+                    GameMaster.fake = 0;
                     Ground.player1.move_up();
                 }else {
+                    GameMaster.fake = 0;
                     Ground.player2.move_up();
                 }
+                PlaygroundGUI.ground.removeKeyBindings();
                 System.out.println("Player moved up");
             }
         }
@@ -149,10 +146,13 @@ public class PlayerActions {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 if(!GameMaster.gamestate) {
+                    GameMaster.fake = 0;
                     Ground.player1.move_down();
                 }else {
+                    GameMaster.fake = 0;
                     Ground.player2.move_down();
                 }
+                PlaygroundGUI.ground.removeKeyBindings();
                 System.out.println("Player moved down");
             }
         }

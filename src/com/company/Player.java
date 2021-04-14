@@ -10,13 +10,15 @@ public class Player{
     public Integer width;
     public Integer height;
     public Integer playerID;
+    public Integer barriersremaining;
 
-    public Player(int x, int y, int width, int height, int playerID){
+    public Player(int x, int y, int width, int height, int playerID, int barriersremaining){
         this.xPos = x;
         this.yPos = y;
         this.width = width;
         this.height = height;
         this.playerID = playerID;
+        this.barriersremaining = barriersremaining;
     }
 
     public Integer getxPos() {
@@ -50,10 +52,15 @@ public class Player{
     public void setHeight(Integer height) {
         this.height = height;
     }
+
     public void setPlayerID(Integer playerID){
         this.playerID = playerID;
     }
     public Integer getPlayerID() { return playerID; }
+
+    public Integer getBarriersremaining() { return barriersremaining; }
+
+    public void setBarriersremaining(Integer barriersremaining) { this.barriersremaining = barriersremaining;}
 
     public int convert_to_2digit_v(int x, int y){
         int a = x + 55;
@@ -68,18 +75,22 @@ public class Player{
         int e = y - 115;
         int f = (e / 100) + 1;
         return Integer.parseInt(String.valueOf(b - 1) + String.valueOf(f));
-
     }
 
-    public void move_up(){
+    public boolean move_up(){
         boolean skipped = false;
         int tmp_yPos = yPos - 30;
         int double_digit = convert_to_2digit_h(xPos, tmp_yPos);
+        // try moving if there is no barrier
         if(PlaygroundGUI.horizontal_border_list.contains(double_digit) || PlaygroundGUI.horizontal_border_list.contains(double_digit+10)){
-            JOptionPane.showMessageDialog(PlaygroundGUI.ground, "You shall not pass!", "There is a barrier!", JOptionPane.ERROR_MESSAGE);
+            if(GameMaster.fake != 1) {
+                JOptionPane.showMessageDialog(PlaygroundGUI.ground, "You shall not pass!", "There is a barrier!", JOptionPane.ERROR_MESSAGE);
+            }
+            return false;
         }else {
             yPos = yPos - 100;
         }
+        // players are on top of each other
         if(playerID == 1){
             if (xPos.equals(Ground.player2.xPos) && yPos.equals(Ground.player2.yPos)){
                 int tmpp_yPos = yPos - 30;
@@ -117,13 +128,17 @@ public class Player{
             JOptionPane.showMessageDialog(PlaygroundGUI.ground, "You were about to move out of the playground, we stopped you there:)", "Passing Playground Borders!", JOptionPane.ERROR_MESSAGE);
         }
         PlaygroundGUI.master.checkforVictory();
+        return true;
     }
-    public void move_down(){
+    public boolean move_down(){
         boolean skipped = false;
         int tmp_yPos = yPos + 70;
         int double_digit = convert_to_2digit_h(xPos, tmp_yPos);
         if(PlaygroundGUI.horizontal_border_list.contains(double_digit) || PlaygroundGUI.horizontal_border_list.contains(double_digit+10)){
-            JOptionPane.showMessageDialog(PlaygroundGUI.ground, "You shall not pass!", "There is a barrier!", JOptionPane.ERROR_MESSAGE);
+            if(GameMaster.fake != 1) {
+                JOptionPane.showMessageDialog(PlaygroundGUI.ground, "You shall not pass!", "There is a barrier!", JOptionPane.ERROR_MESSAGE);
+            }
+            return false;
         }else {
             yPos = yPos + 100;
         }
@@ -164,13 +179,17 @@ public class Player{
             JOptionPane.showMessageDialog(PlaygroundGUI.ground, "You were about to move out of the playground, we stopped you there:)", "Passing Playground Borders!", JOptionPane.ERROR_MESSAGE);
         }
         PlaygroundGUI.master.checkforVictory();
+        return true;
     }
-    public void move_left(){
+    public boolean move_left(){
         boolean skipped = false;
         int tmp_xPos = xPos - 30;
         int double_digit = convert_to_2digit_v(tmp_xPos, yPos);
         if(PlaygroundGUI.vertical_border_list.contains(double_digit) || PlaygroundGUI.vertical_border_list.contains(double_digit-10)){
-            JOptionPane.showMessageDialog(PlaygroundGUI.ground, "You shall not pass!", "There is a barrier!", JOptionPane.ERROR_MESSAGE);
+            if(GameMaster.fake != 1) {
+                JOptionPane.showMessageDialog(PlaygroundGUI.ground, "You shall not pass!", "There is a barrier!", JOptionPane.ERROR_MESSAGE);
+            }
+            return false;
         }else {
             xPos = xPos - 100;
         }
@@ -210,14 +229,17 @@ public class Player{
             }
             JOptionPane.showMessageDialog(PlaygroundGUI.ground, "You were about to move out of the playground, we stopped you there:)", "Passing Playground Borders!", JOptionPane.ERROR_MESSAGE);
         }
-
+    return true;
     }
-    public void move_right(){
+    public boolean move_right(){
         boolean skipped = false;
         int tmp_xPos = xPos + 70;
         int double_digit = convert_to_2digit_v(tmp_xPos, yPos);
         if(PlaygroundGUI.vertical_border_list.contains(double_digit) || PlaygroundGUI.vertical_border_list.contains(double_digit-10)){
-            JOptionPane.showMessageDialog(PlaygroundGUI.ground, "You shall not pass!", "There is a barrier!", JOptionPane.ERROR_MESSAGE);
+            if(GameMaster.fake != 1) {
+                JOptionPane.showMessageDialog(PlaygroundGUI.ground, "You shall not pass!", "There is a barrier!", JOptionPane.ERROR_MESSAGE);
+            }
+            return false;
         }else {
             xPos = xPos + 100;
         }
@@ -257,7 +279,17 @@ public class Player{
             }
             JOptionPane.showMessageDialog(PlaygroundGUI.ground, "You were about to move out of the playground, we stopped you there:)", "Passing Playground Borders!", JOptionPane.ERROR_MESSAGE);
         }
+        return true;
     }
+
+    public void reduceBarrier(){
+        if(this.barriersremaining != 0) {
+            this.barriersremaining -= 1;
+        }else{
+            JOptionPane.showMessageDialog(PlaygroundGUI.ground, "You have 0 Barriers left...", "No more Barriers!", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
     public void draw_player(Graphics g){
         if(playerID == 1) {
             g.setColor(Color.RED);

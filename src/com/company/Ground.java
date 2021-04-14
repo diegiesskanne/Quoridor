@@ -19,8 +19,8 @@ public class Ground extends JPanel {
     static PlayerActions.MoveDownAction downAction;
 
     public Ground() {
-        player1 = new Player(spacing + 4 * 100 + 10, spacing + 100 + 10, 50, 50, 1);
-        player2 = new Player(spacing + 4 * 100 + 10, spacing + 100 + 8 * 100 + 10, 50, 50, 2);
+        player1 = new Player(spacing + 4 * 100 + 10, spacing + 100 + 10, 50, 50, 1, 10);
+        player2 = new Player(spacing + 4 * 100 + 10, spacing + 100 + 8 * 100 + 10, 50, 50, 2, 10);
 
         im = this.getInputMap(WHEN_IN_FOCUSED_WINDOW);
         am = this.getActionMap();
